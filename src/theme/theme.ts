@@ -28,3 +28,5 @@ const theme: MantineThemeOverride = {
 };
 
 export default theme;
+
+///theme guidelines
