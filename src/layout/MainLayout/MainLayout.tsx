@@ -13,9 +13,13 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import React from 'react';
+import { useQuery } from 'react-query';
 import { Outlet } from 'react-router-dom';
 
+import { getParentList } from '../../api/folder';
 import { SideFolderItem } from '../../components/SideFolder/SideFolderItem/SideFolderItem';
+import { CommonResponseI } from '../../dto/common';
+import { FolderItemResponseI } from '../../dto/folder';
 import CommonIcons from '../../util/CommonIcons';
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -125,20 +129,18 @@ const links = [
   { icon: CommonIcons.BsChevronRight, label: 'Contacts' },
 ];
 
-const collections = [
-  { emoji: '👍', label: 'Saleasdasdasds' },
-  { emoji: '🚚', label: 'Deliveries' },
-  { emoji: '💸', label: 'Discounts' },
-  { emoji: '💰', label: 'Profits' },
-  { emoji: '✨', label: 'Reports' },
-  { emoji: '🛒', label: 'Orders' },
-  { emoji: '📅', label: 'Events' },
-  { emoji: '🙈', label: 'Debts' },
-  { emoji: '💁‍♀️', label: 'Customers' },
-];
 const MainLayout = () => {
   const { classes } = useStyles();
 
+  const parentListQuery = useQuery<CommonResponseI<FolderItemResponseI[]>>({
+    queryKey: [['parent_list']],
+    queryFn: () => getParentList(),
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
   const theme = useMantineTheme();
   const mainLinks = links.map((link) => (
     <UnstyledButton key={link.label} className={classes.mainLink}>
@@ -196,13 +198,23 @@ const MainLayout = () => {
               </Tooltip>
             </Group>
             <div className={classes.collections}>
-              {collections.map((collection, i) => (
-                <SideFolderItem
-                  emoji={collection.emoji}
-                  label={collection.label}
-                  key={i}
-                />
-              ))}
+              {parentListQuery.isLoading ? (
+                <></>
+              ) : (
+                <>
+                  {parentListQuery.data &&
+                    parentListQuery.data.data &&
+                    parentListQuery.data.data?.map((ele, i) => (
+                      <SideFolderItem
+                        padding={0}
+                        id={ele.id}
+                        emoji={'💸'}
+                        label={ele.name}
+                        key={i}
+                      />
+                    ))}
+                </>
+              )}
             </div>
           </Navbar.Section>
         </Navbar>
