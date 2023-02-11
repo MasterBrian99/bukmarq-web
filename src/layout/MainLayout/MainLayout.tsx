@@ -16,10 +16,10 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Outlet } from 'react-router-dom';
 
-import { getParentList } from '../../api/folder';
-import { SideFolderItem } from '../../components/SideFolder/SideFolderItem/SideFolderItem';
+import { getParentList } from '../../api/collection';
+import { SideCollectionItem } from '../../components/SideCollection/SideCollectionItem/SideCollectionItem';
+import { CollectionItemResponseI } from '../../dto/collection';
 import { CommonResponseI } from '../../dto/common';
-import { FolderItemResponseI } from '../../dto/folder';
 import CommonIcons from '../../util/CommonIcons';
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -132,7 +132,7 @@ const links = [
 const MainLayout = () => {
   const { classes } = useStyles();
 
-  const parentListQuery = useQuery<CommonResponseI<FolderItemResponseI[]>>({
+  const parentListQuery = useQuery<CommonResponseI<CollectionItemResponseI[]>>({
     queryKey: [['parent_list']],
     queryFn: () => getParentList(),
     keepPreviousData: true,
@@ -205,7 +205,7 @@ const MainLayout = () => {
                   {parentListQuery.data &&
                     parentListQuery.data.data &&
                     parentListQuery.data.data?.map((ele, i) => (
-                      <SideFolderItem
+                      <SideCollectionItem
                         padding={0}
                         id={ele.id}
                         emoji={'💸'}

@@ -2,9 +2,9 @@ import { Box, createStyles, useMantineTheme } from '@mantine/core';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
-import { getChildrenList } from '../../../api/folder';
+import { getChildrenList } from '../../../api/collection';
+import { CollectionItemResponseI } from '../../../dto/collection';
 import { CommonResponseI } from '../../../dto/common';
-import { FolderItemResponseI } from '../../../dto/folder';
 import CommonIcons from '../../../util/CommonIcons';
 
 const useStyles = createStyles((theme) => ({
@@ -38,12 +38,12 @@ interface Props {
   id: number;
   padding: number;
 }
-export const SideFolderItem = (collection: Props) => {
+export const SideCollectionItem = (collection: Props) => {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
   const { classes } = useStyles();
 
-  const parentListQuery = useQuery<CommonResponseI<FolderItemResponseI[]>>({
+  const parentListQuery = useQuery<CommonResponseI<CollectionItemResponseI[]>>({
     queryKey: [['parent_list', collection.id]],
     queryFn: () => getChildrenList({ id: collection.id }),
     keepPreviousData: true,
@@ -85,7 +85,7 @@ export const SideFolderItem = (collection: Props) => {
             parentListQuery.data &&
             parentListQuery.data.data &&
             parentListQuery.data.data.map((ele) => (
-              <SideFolderItem
+              <SideCollectionItem
                 id={ele.id}
                 emoji={'📅'}
                 label={ele.name}
@@ -96,7 +96,7 @@ export const SideFolderItem = (collection: Props) => {
           {/* {collection.label == 'Saleasdasdasds' &&
             opened &&
             newCollections.map((collectionas, j) => (
-              <SideFolderItem
+              <SideCollectionItem
                 id={j}
                 emoji={collectionas.emoji}
                 label={collectionas.label}
