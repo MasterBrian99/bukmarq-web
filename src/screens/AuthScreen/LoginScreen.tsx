@@ -77,7 +77,7 @@ export default function LoginScreen() {
             e.preventDefault();
             loginMutation.mutate({
               data: {
-                username: 'bdssf',
+                username: 'brian',
                 password: '1234',
               },
             });

@@ -1,4 +1,7 @@
-import { CollectionItemResponseI } from '../dto/collection';
+import {
+  CollectionItemResponseI,
+  CollectionParentUpdateRequestI,
+} from '../dto/collection';
 import { CommonResponseI } from '../dto/common';
 import apiClient from '../http/HttpClient';
 
@@ -14,4 +17,11 @@ export const getChildrenList = async (params: {
 }): Promise<CommonResponseI<CollectionItemResponseI[]>> => {
   const res = await apiClient.get(`collection/children/${params.id}`);
   return res.data as CommonResponseI<CollectionItemResponseI[]>;
+};
+
+export const updateParent = async (params: {
+  data: CollectionParentUpdateRequestI;
+}): Promise<CommonResponseI<any>> => {
+  const res = await apiClient.put(`collection/parent`, params.data);
+  return res.data as CommonResponseI<any>;
 };

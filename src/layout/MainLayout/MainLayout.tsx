@@ -192,8 +192,8 @@ const MainLayout = () => {
                 Collections
               </Text>
               <Tooltip label="Create collection" withArrow position="right">
-                <ActionIcon variant="default" size={18}>
-                  <CommonIcons.BsChevronRight size={12} stroke={'1.5'} />
+                <ActionIcon variant="default" size={18} my={'sm'}>
+                  <CommonIcons.MdOutlineAdd size={12} stroke={'1.5'} />
                 </ActionIcon>
               </Tooltip>
             </Group>
@@ -204,7 +204,7 @@ const MainLayout = () => {
                 <>
                   {parentListQuery.data &&
                     parentListQuery.data.data &&
-                    parentListQuery.data.data?.map((ele, i) => (
+                    parentListQuery.data.data.map((ele, i) => (
                       <SideCollectionItem
                         padding={0}
                         id={ele.id}
