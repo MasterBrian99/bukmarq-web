@@ -1,4 +1,5 @@
 import {
+  CollectionCreateRequestI,
   CollectionItemResponseI,
   CollectionParentUpdateRequestI,
 } from '../dto/collection';
@@ -21,7 +22,14 @@ export const getChildrenList = async (params: {
 
 export const updateParent = async (params: {
   data: CollectionParentUpdateRequestI;
-}): Promise<CommonResponseI<any>> => {
+}): Promise<CommonResponseI<CommonResponseI<null>>> => {
   const res = await apiClient.put(`collection/parent`, params.data);
-  return res.data as CommonResponseI<any>;
+  return res.data as CommonResponseI<CommonResponseI<null>>;
+};
+
+export const createCollection = async (params: {
+  data: CollectionCreateRequestI;
+}): Promise<CommonResponseI<CommonResponseI<null>>> => {
+  const res = await apiClient.post(`collection`, params.data);
+  return res.data as CommonResponseI<CommonResponseI<null>>;
 };

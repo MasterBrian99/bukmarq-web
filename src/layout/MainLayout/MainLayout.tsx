@@ -12,11 +12,11 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
-import React from 'react';
 import { useQuery } from 'react-query';
 import { Outlet } from 'react-router-dom';
 
 import { getParentList } from '../../api/collection';
+import CreateCollection from '../../components/CreateCollection/CreateCollection';
 import { SideCollectionItem } from '../../components/SideCollection/SideCollectionItem/SideCollectionItem';
 import { CollectionItemResponseI } from '../../dto/collection';
 import { CommonResponseI } from '../../dto/common';
@@ -131,9 +131,8 @@ const links = [
 
 const MainLayout = () => {
   const { classes } = useStyles();
-
   const parentListQuery = useQuery<CommonResponseI<CollectionItemResponseI[]>>({
-    queryKey: [['parent_list']],
+    queryKey: ['parent_list'],
     queryFn: () => getParentList(),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
@@ -191,11 +190,13 @@ const MainLayout = () => {
               <Text size="xs" weight={500} color="dimmed">
                 Collections
               </Text>
-              <Tooltip label="Create collection" withArrow position="right">
-                <ActionIcon variant="default" size={18} my={'sm'}>
-                  <CommonIcons.MdOutlineAdd size={12} stroke={'1.5'} />
-                </ActionIcon>
-              </Tooltip>
+              <CreateCollection>
+                <Tooltip label="Create collection" withArrow position="right">
+                  <ActionIcon variant="default" size={18} my={'sm'}>
+                    <CommonIcons.MdOutlineAdd size={12} stroke={'1.5'} />
+                  </ActionIcon>
+                </Tooltip>
+              </CreateCollection>
             </Group>
             <div className={classes.collections}>
               {parentListQuery.isLoading ? (

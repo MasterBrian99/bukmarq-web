@@ -8,6 +8,7 @@ import { CollectionItemResponseI } from '../../../dto/collection';
 import { CommonResponseI } from '../../../dto/common';
 import { movingCollectionAtom } from '../../../store/atom/atom';
 import CommonIcons from '../../../util/CommonIcons';
+import CreateCollection from '../../CreateCollection/CreateCollection';
 
 interface Prop {
   collectionId: number;
@@ -61,6 +62,9 @@ const SideCollectionItemMenu = (prop: Prop) => {
         >
           Paste
         </Menu.Item>
+        <CreateCollection>
+          <Menu.Item closeMenuOnClick={false}>Create collection</Menu.Item>
+        </CreateCollection>
         <Menu.Item
           icon={<CommonIcons.BsChevronRight size={14} />}
           rightSection={

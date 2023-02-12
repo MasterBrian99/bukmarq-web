@@ -1,6 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import { AuthProvider } from 'react-auth-kit';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { RecoilRoot } from 'recoil';
 
 import MainRouter from './router/MainRouter';
@@ -14,6 +15,7 @@ function App() {
           <MantineProvider withGlobalStyles withNormalizeCSS>
             <MainRouter />
           </MantineProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </AuthProvider>
     </RecoilRoot>
