@@ -1,3 +1,4 @@
+import { ScrollArea } from '@mantine/core';
 import {
   ActionIcon,
   AppShell,
@@ -185,12 +186,12 @@ const MainLayout = () => {
             <div className={classes.mainLinks}>{mainLinks}</div>
           </Navbar.Section>
 
-          <Navbar.Section className={classes.section}>
+          <Navbar.Section className={classes.section} grow component={ScrollArea}>
             <Group className={classes.collectionsHeader} position="apart">
               <Text size="xs" weight={500} color="dimmed">
                 Collections
               </Text>
-              <CreateCollection>
+              <CreateCollection parentId={0}>
                 <Tooltip label="Create collection" withArrow position="right">
                   <ActionIcon variant="default" size={18} my={'sm'}>
                     <CommonIcons.MdOutlineAdd size={12} stroke={'1.5'} />
@@ -209,7 +210,7 @@ const MainLayout = () => {
                       <SideCollectionItem
                         padding={0}
                         id={ele.id}
-                        emoji={'💸'}
+                        emoji={ele.unified}
                         label={ele.name}
                         key={i}
                       />

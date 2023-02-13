@@ -1,6 +1,6 @@
-import { Button } from '@mantine/core';
+import { Button, Popover } from '@mantine/core';
 import { TextInput } from '@mantine/core';
-import { Box, Group, Modal } from '@mantine/core';
+import { Box, Group } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -9,6 +9,7 @@ import { createCollection } from '../../api/collection';
 
 interface Prop {
   children: React.ReactNode;
+  parentId: number;
 }
 const CreateCollection = (prop: Prop) => {
   const queryClient = useQueryClient();
@@ -35,13 +36,13 @@ const CreateCollection = (prop: Prop) => {
     createCollectionMutation.mutate({
       data: {
         name: form.values.name,
-        parentId: 0,
+        parentId: prop.parentId,
       },
     });
   }
   return (
     <>
-      <Modal
+      {/* <Modal
         opened={opened}
         onClose={() => setOpened(false)}
         title="Create new collection"
@@ -59,13 +60,59 @@ const CreateCollection = (prop: Prop) => {
             </Group>
           </form>
         </Box>
-      </Modal>
+      </Modal> */}
 
-      <Group position="center">
-        <Box component={'span'} onClick={() => setOpened(true)}>
-          {prop.children}
-        </Box>
-      </Group>
+      {/* <Dialog
+        position={{ top: 20, right: 20 }}
+        opened={opened}
+        withCloseButton
+        onClose={() => setOpened(false)}
+        size="lg"
+        radius="md"
+      >
+        <Text size="md" style={{ marginBottom: 10 }} weight={500}>
+          Create new collection
+        </Text>
+
+        <form onSubmit={form.onSubmit(() => submitCreateCollection())}>
+          <TextInput
+            {...form.getInputProps('name')}
+            placeholder="Collection name"
+            label="Collection name"
+            required
+          />
+          <Group position="right" mt="md">
+            <Button type="submit">Create</Button>
+          </Group>
+        </form>
+      </Dialog> */}
+      <Popover
+        position="bottom"
+        withArrow
+        shadow="md"
+        opened={opened}
+        onChange={setOpened}
+      >
+        <Popover.Target>
+          {/* <Button>Toggle popover</Button> */}
+          <Box component={'span'} onClick={() => setOpened(true)}>
+            {prop.children}
+          </Box>
+        </Popover.Target>
+        <Popover.Dropdown>
+          <form onSubmit={form.onSubmit(() => submitCreateCollection())}>
+            <TextInput
+              {...form.getInputProps('name')}
+              placeholder="Collection name"
+              label="Collection name"
+              required
+            />
+            <Group position="right" mt="md">
+              <Button type="submit">Create</Button>
+            </Group>
+          </form>
+        </Popover.Dropdown>
+      </Popover>
     </>
   );
 };

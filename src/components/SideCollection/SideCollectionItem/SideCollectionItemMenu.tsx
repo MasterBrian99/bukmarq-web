@@ -62,7 +62,7 @@ const SideCollectionItemMenu = (prop: Prop) => {
         >
           Paste
         </Menu.Item>
-        <CreateCollection>
+        <CreateCollection parentId={prop.collectionId}>
           <Menu.Item closeMenuOnClick={false}>Create collection</Menu.Item>
         </CreateCollection>
         <Menu.Item

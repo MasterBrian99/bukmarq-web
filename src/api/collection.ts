@@ -33,3 +33,10 @@ export const createCollection = async (params: {
   const res = await apiClient.post(`collection`, params.data);
   return res.data as CommonResponseI<CommonResponseI<null>>;
 };
+
+export const updateEmoji = async (params: {
+  data: CollectionParentUpdateRequestI;
+}): Promise<CommonResponseI<CommonResponseI<null>>> => {
+  const res = await apiClient.put(`collection/emoji`, params.data);
+  return res.data as CommonResponseI<CommonResponseI<null>>;
+};

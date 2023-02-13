@@ -1,8 +1,10 @@
 import { Box, createStyles, Flex, Text, useMantineTheme } from '@mantine/core';
+import { useClickOutside } from '@mantine/hooks';
+import EmojiPicker, { Emoji } from 'emoji-picker-react';
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import { getChildrenList } from '../../../api/collection';
+import { getChildrenList, updateEmoji } from '../../../api/collection';
 import { CollectionItemResponseI } from '../../../dto/collection';
 import { CommonResponseI } from '../../../dto/common';
 import CommonIcons from '../../../util/CommonIcons';
@@ -41,17 +43,32 @@ interface Props {
   padding: number;
 }
 export const SideCollectionItem = (collection: Props) => {
+  const queryClient = useQueryClient();
   const [opened, setOpened] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const outsideClickRef = useClickOutside(() => setShowEmojiPicker(false));
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const parentListQuery = useQuery<CommonResponseI<CollectionItemResponseI[]>>({
-    queryKey: [['parent_list', collection.id]],
+    queryKey: ['parent_list', collection.id],
     queryFn: () => getChildrenList({ id: collection.id }),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
     enabled: opened,
     onSuccess: (data) => {
       console.log(data);
+    },
+  });
+
+  const emojiUpdateMutation = useMutation(updateEmoji, {
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.refetchQueries(['parent_list', collection.id]);
+      queryClient.refetchQueries(['parent_list'], { stale: true });
+    },
+    onError: (err) => {
+      // console.log(err.response?.data.error);
+      console.log(err);
     },
   });
   return (
@@ -84,9 +101,36 @@ export const SideCollectionItem = (collection: Props) => {
               }}
             />
           </Box>
-          <Box component={'span'} style={{ marginRight: 9, fontSize: 16 }}>
-            {collection.emoji}
+          <Box
+            component={'span'}
+            style={{ marginRight: 9, fontSize: 16 }}
+            onClick={() => setShowEmojiPicker(true)}
+          >
+            <Emoji unified={collection.emoji} size={20} />
+            {showEmojiPicker ? (
+              <Box
+                ref={outsideClickRef}
+                pos={'absolute'}
+                sx={{
+                  zIndex: 2,
+                }}
+              >
+                <EmojiPicker
+                  onEmojiClick={(e) => {
+                    setShowEmojiPicker(false);
+                    console.log(e.unified);
+                    emojiUpdateMutation.mutate({
+                      data: {
+                        collectionId: collection.id,
+                        unified: e.unified,
+                      },
+                    });
+                  }}
+                />
+              </Box>
+            ) : null}
           </Box>
+          {/* <EmojiPicker /> */}
           <Box component={'span'}>{collection.label}</Box>
         </Box>
         <Box pos={'relative'}>
@@ -109,7 +153,7 @@ export const SideCollectionItem = (collection: Props) => {
             parentListQuery.data.data.map((ele) => (
               <SideCollectionItem
                 id={ele.id}
-                emoji={'📅'}
+                emoji={ele.unified}
                 label={ele.name}
                 key={ele.id}
                 padding={7}
