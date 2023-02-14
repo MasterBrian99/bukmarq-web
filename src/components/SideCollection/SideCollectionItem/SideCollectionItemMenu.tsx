@@ -1,6 +1,6 @@
 import { Menu, Text, UnstyledButton } from '@mantine/core';
 import { useState } from 'react';
-import { useMutation, UseQueryResult } from 'react-query';
+import { useMutation, useQueryClient, UseQueryResult } from 'react-query';
 import { useRecoilState } from 'recoil';
 
 import { updateParent } from '../../../api/collection';
@@ -16,12 +16,15 @@ interface Prop {
 }
 
 const SideCollectionItemMenu = (prop: Prop) => {
+  const queryClient = useQueryClient();
+
   const [opened, setOpened] = useState(false);
   const [movingCollection, setMovingCollection] = useRecoilState(movingCollectionAtom);
   const parentChangeMutation = useMutation(updateParent, {
     onSuccess: (data) => {
       console.log(data);
-      prop.query.refetch();
+      // prop.query.refetch();
+      queryClient.refetchQueries('parent_list', { stale: true });
       setMovingCollection(null);
     },
     onError: (err) => {

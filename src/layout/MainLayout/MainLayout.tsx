@@ -28,6 +28,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   section: {
+    position: 'relative',
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
     marginBottom: theme.spacing.md,
@@ -133,7 +134,7 @@ const links = [
 const MainLayout = () => {
   const { classes } = useStyles();
   const parentListQuery = useQuery<CommonResponseI<CollectionItemResponseI[]>>({
-    queryKey: ['parent_list'],
+    queryKey: 'parent_list',
     queryFn: () => getParentList(),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
