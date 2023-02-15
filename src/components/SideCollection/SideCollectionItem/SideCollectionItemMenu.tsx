@@ -1,4 +1,4 @@
-import { Menu, Text, UnstyledButton } from '@mantine/core';
+import { Menu, UnstyledButton } from '@mantine/core';
 import { useState } from 'react';
 import { useMutation, useQueryClient, UseQueryResult } from 'react-query';
 import { useRecoilState } from 'recoil';
@@ -43,6 +43,15 @@ const SideCollectionItemMenu = (prop: Prop) => {
     }
   }
 
+  function moveToRoot() {
+    parentChangeMutation.mutate({
+      data: {
+        collectionId: prop.collectionId,
+        parentId: 0,
+      },
+    });
+  }
+
   return (
     <Menu shadow="md" position="right-start" opened={opened} onChange={setOpened}>
       <Menu.Target>
@@ -68,16 +77,7 @@ const SideCollectionItemMenu = (prop: Prop) => {
         <CreateCollection parentId={prop.collectionId}>
           <Menu.Item closeMenuOnClick={false}>Create collection</Menu.Item>
         </CreateCollection>
-        <Menu.Item
-          icon={<CommonIcons.BsChevronRight size={14} />}
-          rightSection={
-            <Text size="xs" color="dimmed">
-              ⌘K
-            </Text>
-          }
-        >
-          Search
-        </Menu.Item>
+        <Menu.Item onClick={() => moveToRoot()}>Move to root</Menu.Item>
 
         <Menu.Divider />
 

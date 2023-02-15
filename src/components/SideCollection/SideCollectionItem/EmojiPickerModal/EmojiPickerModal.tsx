@@ -17,8 +17,8 @@ const EmojiPickerModal = (prop: Prop) => {
   const emojiUpdateMutation = useMutation(updateEmoji, {
     onSuccess: () => {
       //   console.log(data);
-      queryClient.refetchQueries(['parent_list', prop.id]);
-      queryClient.refetchQueries(['parent_list'], { stale: true });
+      queryClient.refetchQueries(['parent_list', prop.id], { exact: true });
+      queryClient.refetchQueries('parent_list');
       setOpened(false);
     },
     onError: (err) => {
@@ -34,7 +34,7 @@ const EmojiPickerModal = (prop: Prop) => {
         size="auto"
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Introduce yourself!"
+        title="Update emoji"
       >
         <EmojiPicker
           onEmojiClick={(e) => {

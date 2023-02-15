@@ -6,7 +6,7 @@ export interface CollectionItemResponseI {
 
 export interface CollectionParentUpdateRequestI {
   collectionId?: number;
-  parentId?: number;
+  parentId?: number | null;
   unified?: string;
 }
 
